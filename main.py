@@ -33,7 +33,7 @@ class Board:
                     character_occurence[char] = 1
 
         # the letters are sorted by recurrence in increasing order
-        sorted_list = quicksort_tuple_list(character_occurence)
+        sorted_list = self.quicksort_tuple_list(character_occurence)
 
         # the most occuring characters are set as the "optimal letters" in decreasing order
         for i in range(1, self.letter_count+1):
@@ -57,7 +57,7 @@ class Board:
     def optimize_small_words(self) -> None:
         
         # the quicksort function is used to sort the words by length
-        sorted_words = quicksort_tuple_list_H([(i, len(i)) for i in self.words])
+        sorted_words = self.quicksort_tuple_list_H([(i, len(i)) for i in self.words])
         counter = 0
 
         # the letters in the words are checked and added to 
