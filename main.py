@@ -14,9 +14,20 @@ class Board:
         self.uncovered_words_occ = 0
         self.uncovered_words_osw = 0
 
-        self.optmize_char_count()        
+        if (__name__ == "__main__"):
+            self.optmize_char_count()        
+            self.optimize_small_words()
+
+    # get_optimal_set computes both algorithms and returns the set with the most words that have been uncovered
+    def get_optimal_set(self) -> tuple[list[str], int]:
+
+        self.optmize_char_count()
         self.optimize_small_words()
 
+        if (self.uncovered_words_occ > self.uncovered_words_osw):
+            return self.letters_occ, self.uncovered_words_occ
+        else:
+            return self.letters_osw, self.uncovered_words_osw
 
     # optimize_char_count computes the best letters by counting the total amount of letter 
     # and choosing the most common ones
@@ -122,8 +133,8 @@ class Board:
         return [input("Enter word number %d: "% a) for a in range(1, word_count+1)]
 
     # gui_input is called by the GUI to input the words into the board
-    def gui_input(self, inputs: list[str]) -> list[str]:
-        return inputs
+    def gui_input(self, inputs: list[str]):
+        self.words = inputs
     
 def main() -> None:
     
