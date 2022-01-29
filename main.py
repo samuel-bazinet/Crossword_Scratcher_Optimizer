@@ -1,39 +1,5 @@
 # Crossword_Scrathcer_Optimize 
 
-# quicksort_tuple_list is a function that sets up the quicksort_tuple_list_H function 
-# it is meant to sort the letters by occurence
-def quicksort_tuple_list(letters: dict[str, int]) -> list[(str, int)]:
-
-    letter_items = letters.items()
-    letter_list = [(i[0], i[1]) for i in letter_items]
-
-    return quicksort_tuple_list_H(letter_list)
-
-# quicksort_tuple_list_H sorts a list whose elements are tuples
-# the int compared is the second element in the tuple
-def quicksort_tuple_list_H(letters: list[(str, int)]) -> list[(str, int)]:
-    
-    if (len(letters) <= 1):
-        return letters
-
-    pivot = letters[-1][1]
-    x = 0
-    for i in range(len(letters)-1):
-        if letters[i][1] < pivot:
-            temp = letters[x]
-            letters[x] = letters[i]
-            letters[i] = temp
-            x += 1
-
-    temp = letters[x]
-    letters[x] = letters[-1]
-    letters[-1] = temp
-
-    lista = quicksort_tuple_list_H(letters[0:x])
-    listb = quicksort_tuple_list_H(letters[x+1:])
-            
-    return  lista + [letters[x]] + listb
-
 # Board is an object representing the board containing the words
 # on a crossword scratcher
 class Board:
@@ -41,7 +7,7 @@ class Board:
     # The class is constructed by having the user input the words contained in the crossword board
     def __init__(self, word_count: int = 5, letter_count: int = 10) -> None:
 
-        self.words: list[str] = [input("Enter word number %d: "% a) for a in range(1, word_count+1)]
+        self.words: list[str] = self.user_input(word_count) if __name__ == "__main__" else []
         self.letter_count = letter_count
         self.letters_occ: list[str] = []
         self.letters_osw: list[str] = []
@@ -85,9 +51,6 @@ class Board:
 
             if flag:
                 self.uncovered_words_occ += 1
-                
-        
-
     
     # optimize_small_words computes the best letters by choosing letters that would complete
     # small words as to complete as many words as possible
@@ -118,6 +81,49 @@ class Board:
             if flag:
                 self.uncovered_words_osw += 1
 
+    # quicksort_tuple_list is a function that sets up the quicksort_tuple_list_H function 
+    # it is meant to sort the letters by occurence
+    def quicksort_tuple_list(self, letters: dict[str, int]) -> list[(str, int)]:
+
+        letter_items = letters.items()
+        letter_list = [(i[0], i[1]) for i in letter_items]
+
+        return self.quicksort_tuple_list_H(letter_list)
+
+    # quicksort_tuple_list_H sorts a list whose elements are tuples
+    # the int compared is the second element in the tuple
+    def quicksort_tuple_list_H(self, letters: list[(str, int)]) -> list[(str, int)]:
+        
+        if (len(letters) <= 1):
+            return letters
+
+        pivot = letters[-1][1]
+        x = 0
+        for i in range(len(letters)-1):
+            if letters[i][1] < pivot:
+                temp = letters[x]
+                letters[x] = letters[i]
+                letters[i] = temp
+                x += 1
+
+        temp = letters[x]
+        letters[x] = letters[-1]
+        letters[-1] = temp
+
+        lista = self.quicksort_tuple_list_H(letters[0:x])
+        listb = self.quicksort_tuple_list_H(letters[x+1:])
+                
+
+        return  lista + [letters[x]] + listb
+
+    # user_input is called when the program is called in CLI mode
+    # it makes the user input the words via the CLI
+    def user_input(self, word_count: int) -> list[str]:
+        return [input("Enter word number %d: "% a) for a in range(1, word_count+1)]
+
+    # gui_input is called by the GUI to input the words into the board
+    def gui_input(self, inputs: list[str]) -> list[str]:
+        return inputs
     
 def main() -> None:
     
